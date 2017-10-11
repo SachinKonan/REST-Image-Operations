@@ -6,5 +6,5 @@ Additionally has a developing eye-detector, which uses a simple MLP model which 
 
 *Note: The Flask app requires the download of Numpy, Scipy, and Matplotlib, but those are provided with the creation of a pythonanywhere free server. 
 
-![alt text](https://github.com/SachinKonan/REST-Image-Operations/harden_rect.jpg "James Harden with cvtRect operation")
+![alt text](https://github.com/SachinKonan/REST-Image-Operations/harden_rect.jpg)
 
