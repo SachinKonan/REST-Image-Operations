@@ -177,33 +177,38 @@ def drawRect():
         ret = convertback(img1)
         return jsonify("data:image/jpeg;base64," + ret)
 
-
-@app.route('/store', methods=['POST'])
-def getdata():
-    data = request.get_json()
+@app.route('/cvtCannyEdge', methods = ['POST'])
+def can():
+	data = request.get_json()
     string = data['imgdata'].split(',')
     tasks['header'] = string[0]
     converted = BytesIO(base64.b64decode(string[1]))
     img1 = np.array(Image.open(converted))
-    tasks['image'] = list(img1)
-    def cvt2Gray(img):
-        return np.dot( img[:,:,:3],[0.2989, 0.5870, 0.1140] )
-
-    gray = cvt2Gray(img1)
+	gray = cvt2Gray(img1)
     edged = feature.canny(gray).astype(float)*255
+	ret = convertback(edged)
+	return jsonify("data:image/jpeg;base64," + ret)
 
-    def convertback(img):
-        image = Image.fromarray(img)
-        if image.mode != 'RGB':
-            image = image.convert('RGB')
-        buffer = BytesIO()
-        image.save(buffer, format="JPEG")
-        img_str = base64.b64encode(buffer.getvalue())
-        return img_str.decode('utf-8')
-
-    returnval = convertback(edged)
-
-    return jsonify("data:image/jpeg;base64," + returnval)
+def list_flattener(l, current = []):
+	for i in l:
+		if type(i) is list:
+			list_flattener(i, current)
+		else:
+			current.append(i)
+	return current
+			
+@app.route('/cvtdrawLine', methods=['POST'])
+def linedrawer():
+    data = request.get_json()
+    string = data['imgdata'].split(',')
+    tasks['header'] = string[0]
+	#should be a list with two lists that show endpoints: [ [x1,y1], [x2,y2] ]
+	coordinates = data['coordinates']
+    converted = BytesIO(base64.b64decode(string[1]))
+    img1 = np.array(Image.open(converted))
+	new_img = liner(list_flattener(coordinates), img1)
+	ret = convertback(new_img)
+    return jsonify("data:image/jpeg;base64," + ret)
 
 @app.route('/eyedetector', methods=['POST'])
 def eyedetection():
@@ -231,7 +236,15 @@ def eyedetection():
     returnval = convertback(buf)
 
     return jsonify("data:image/jpeg;base64," + returnval)
+	
+@app.route('/store', methods=['POST'])
+def getdata():
+    data = request.get_json()
+    string = data['imgdata'].split(',')
+    tasks['header'] = string[0]
+    return jsonify("Done")
 
+	
 @app.route('/printer')
 def printer():
      return string
