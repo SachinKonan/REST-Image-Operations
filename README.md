@@ -5,3 +5,6 @@ Main file contains a Python3.5 Flask server that can easily be created using the
 Additionally has a developing eye-detector, which uses a simple MLP model which has been pre-trained locally for prediction. 
 
 *Note: The Flask app requires the download of Numpy, Scipy, and Matplotlib, but those are provided with the creation of a pythonanywhere free server. 
+
+![alt text](https://github.com/SachinKonan/REST-Image-Operations/harden_rect "James Harden with cvtRect operation")
+
